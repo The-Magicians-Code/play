@@ -153,34 +153,12 @@ const MCTSTicTacToe = () => {
       return winner === 'O' ? 1 : 0; // O is AI player
     }
 
-    // backpropagate(node, result) {
-    //   while (node !== null) {
-    //     node.update(result);
-    //     node = node.parent;
-    //   }
-    // }
-    
-    // Corrected backpropagate function
     backpropagate(node, result) {
-      let tempNode = node;
-      while (tempNode !== null) {
-        // The score must be from the perspective of the player who made the move TO this node.
-        // tempNode.player is who moves FROM this node, so the mover was the other player.
-        const playerWhoMoved = tempNode.player === 'X' ? 'O' : 'X';
-    
-        let scoreForMover;
-        // The simulation `result` is always from O's perspective (1 for O win).
-        if (playerWhoMoved === 'O') {
-          // If the AI ('O') made the move, its score is the direct result.
-          scoreForMover = result;
-        } else {
-          // If the opponent ('X') made the move, its score is the inverse of the AI's score.
-          scoreForMover = 1 - result;
-        }
-    
-        // Update the node with the score from the correct player's perspective.
-        tempNode.update(scoreForMover);
-        tempNode = tempNode.parent;
+      let currentResult = result;
+      while (node !== null) {
+        node.update(currentResult);
+        currentResult = 1 - currentResult;
+        node = node.parent;
       }
     }
 
